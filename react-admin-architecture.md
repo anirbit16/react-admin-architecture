@@ -167,7 +167,77 @@ Treating these states explicitly ensures consistent behavior and clearer user fe
 Shared or global state is intentionally minimized. Only cross-cutting concerns—such as user session information or commonly reused picklists—are stored globally.  
 In most cases, page-local state is preferred to reduce coupling and improve maintainability.
 
+## 6. Form Handling & Validation Patterns
+
+Forms are central to the dashboard’s core workflows, including record creation and updates, filtering, and configuration tasks. As these interactions often modify persistent data, form behavior prioritizes clarity, correctness, and predictable feedback.
+
 ---
+
+### Form State Ownership
+
+Form-related state is deliberately split to balance responsiveness with control:
+
+- **Local state**:
+Input values and immediate interaction state are managed within form components to keep them responsive and reusable.
+
+- **Page-level state**:
+Submission handling, request status, and success or failure outcomes are coordinated at the page level, where side effects and API interactions are managed.
+
+This separation keeps form components focused on input concerns while centralizing submission logic.
+
+---
+
+### Client-Side Validation
+
+Client-side validation is intentionally conservative and limited to obvious issues that can be detected immediately, such as:
+- required field checks
+- basic type or length constraints
+- simple relational rules (for example, start date before end date)
+
+The frontend does not attempt to replicate backend business rules, avoiding duplicated logic and potential drift.
+
+---
+
+### Server-Side Validation
+
+The backend remains the authoritative source for business validation. Validation errors returned by the API are surfaced in the UI and mapped appropriately:
+
+- **Field-level errors** when a specific input can be identified
+- **Form-level errors** when validation applies to the submission as a whole
+
+This ensures that complex or evolving rules remain centralized while still providing actionable feedback to users.
+
+---
+
+### Error Presentation and Feedback
+
+Error and submission feedback follows consistent presentation rules:
+- field-level errors are displayed inline, adjacent to the relevant inputs
+- form-level errors are shown in a fixed, predictable banner location
+- submission progress is indicated using a loading state with disabled submit actions
+
+These conventions prevent ambiguous states and make form behavior predictable across the application.
+
+---
+
+### Failed and Partial Submissions
+
+On failed submissions, user input is preserved to avoid unnecessary re-entry.
+When partial success is supported by the backend, the UI clearly communicates what was saved and what still requires attention, using explicit messaging (for example, “X records saved, Y require correction”).
+
+This behavior is especially important in operational workflows where data entry can be time-consuming.
+
+---
+
+### Benefits
+
+This approach provides:
+- no duplicated validation logic across frontend and backend
+- clear localization of errors for faster correction
+- predictable and consistent submission behavior
+- reusable form patterns across multiple workflows
+
+
 
 
 
