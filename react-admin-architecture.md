@@ -236,6 +236,71 @@ This approach provides:
 - clear localization of errors for faster correction
 - predictable and consistent submission behavior
 - reusable form patterns across multiple workflows
+## 7. API Interaction Patterns
+
+Most dashboard screens rely on backend APIs to list, view, create, and update records. To keep behavior consistent and debuggable, API interactions follow a standardized request lifecycle and error-handling approach.
+
+---
+
+### Request Lifecycle
+
+API interactions are modeled as explicit state transitions rather than implicit side effects. Each request follows a predictable sequence:
+
+1. Request parameters are derived from current UI state (filters, pagination, selected records).  
+2. The API call is triggered.  
+3. The affected UI region enters a loading state.  
+4. The response is normalized and stored as remote state.  
+5. Errors are surfaced predictably while preserving user context.  
+
+This explicit lifecycle makes request behavior easier to trace and reason about during development and debugging.
+
+---
+
+### Scoped Loading Indicators
+
+Loading states are scoped to the UI elements directly affected by the request:
+
+- **Table views**: Table-level loading indicators or skeleton states  
+- **Forms**: Disabled submit actions with visible submission indicators  
+- **Dependent inputs**: Localized loading indicators for dropdowns or dynamic fields  
+
+Where appropriate, failed requests can be safely retried without losing contextual state such as filters or partially entered form data.
+
+---
+
+### Response Normalization
+
+API responses are normalized at the boundary between data access and UI rendering. This includes:
+- mapping backend field names into frontend-friendly shapes  
+- converting values into UI-ready types (for example, dates, booleans, enums)  
+- handling missing or optional fields defensively  
+
+Centralizing normalization reduces duplication and ensures consistent rendering across components.
+
+---
+
+### Error Visibility and Context Preservation
+
+Errors are never handled silently. When requests fail:
+- the failure is reflected visibly in the affected UI region  
+- user context (filters, pagination, form input) is preserved  
+- retry actions are supported where applicable  
+
+This approach avoids disruptive resets and improves usability in operational workflows.
+
+---
+
+### Benefits
+
+This interaction model provides:
+- no invisible or implicit API requests  
+- consistent behavior across pages and workflows  
+- centralized data transformation and error handling  
+- predictable recovery from transient failures  
+
+---
+
+
 
 
 
