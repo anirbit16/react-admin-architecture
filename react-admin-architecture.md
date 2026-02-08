@@ -390,7 +390,101 @@ This strategy provides:
 - clear recovery paths for common failure scenarios  
 - a debuggable and transparent request lifecycle  
 
+## 9. Table & List Patterns
+
+Tables and lists represent the majority of screens in the admin dashboard. These patterns standardize pagination, selection, bulk actions, and data presentation to ensure consistent behavior across workflows.
+
 ---
+
+### Pagination Strategy
+
+Pagination is controlled at the page level and driven by backend data.
+
+Page-level state includes:
+- current page (1-based indexing)
+- page size (default: 25, configurable)
+- total record count (from the API)
+- derived page count based on total and page size
+
+Pagination is **server-side**, with the backend responsible for offset/limit handling and filtered queries. This approach ensures scalability for large datasets.
+
+---
+
+### Row Selection Patterns
+
+Row selection behavior is standardized across tables:
+
+- **Single selection**: Explicit row actions or visual row highlighting  
+- **Multi-selection**: Per-row checkboxes with a header-level “select all” option  
+- **Select all behavior**: Header checkbox toggles all currently visible rows  
+- **Persistent selection**: Selection state survives pagination and filtering changes  
+
+This consistency prevents accidental actions and supports efficient bulk operations.
+
+---
+
+### Bulk Actions
+
+Bulk actions are selection-driven and context-aware.
+
+When rows are selected, a dedicated action toolbar becomes visible:
+- **Primary actions**: Destructive operations such as delete (confirmation required)  
+- **Secondary actions**: Export, archive, assign, duplicate  
+- **Disabled states**: Actions display clear reasons when unavailable (for example, insufficient permissions or mixed selection types)  
+
+This approach avoids hidden actions and makes intent explicit.
+
+---
+
+### Sorting and Filtering
+
+Sorting and filtering follow predictable rules:
+
+- column headers support single-column sorting only  
+- multiple filters are grouped within a collapsible filter panel above the table  
+- filter state persists across pagination and navigation  
+- a single “clear all” action resets all filters  
+
+These patterns balance flexibility with simplicity and reduce accidental state resets.
+
+---
+
+### Empty and Loading States
+
+Table states are explicitly differentiated:
+
+- **Initial load**: Skeleton rows matching table height  
+- **No data**: “No records match your filters” with a relevant action  
+- **Filtered empty**: Guidance to adjust filters  
+- **Error state**: Error banner with retry option  
+
+Clear state differentiation prevents ambiguity and improves user confidence.
+
+---
+
+### Performance Considerations
+
+Performance optimizations are applied selectively based on data size and usage patterns:
+- virtualization for large tables (typically >100 rows)  
+- debounced search inputs (approximately 300ms delay)  
+- memoized row rendering using stable record identifiers  
+- optional column resizing with persisted widths stored locally  
+
+These optimizations prioritize usability without introducing unnecessary complexity.
+
+---
+
+### Benefits
+
+These patterns provide:
+- consistent table behavior across all pages  
+- predictable selection and bulk action workflows  
+- scalability through server-side pagination  
+- clear guidance during empty, loading, and error states  
+
+---
+
+
 
 
 
