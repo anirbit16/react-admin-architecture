@@ -298,7 +298,101 @@ This interaction model provides:
 - centralized data transformation and error handling  
 - predictable recovery from transient failures  
 
+## 8. Error Handling Strategies
+
+API failures and network issues are treated as expected operating conditions rather than exceptional edge cases. Error handling is designed to preserve user context, provide clear recovery paths, and maintain consistent behavior across all dashboard pages.
+
 ---
+
+### Error Categories
+
+Errors are classified into a small set of predictable categories:
+
+- **Network errors**: Timeouts, connectivity loss, or transient failures  
+- **API errors**: Client or server responses (4xx / 5xx)  
+- **Validation errors**: Backend-enforced business rule violations  
+- **Permission errors**: Access denied or insufficient privileges  
+- **Empty results**: Successful responses with no data  
+
+Explicit categorization ensures that similar failures are handled consistently across workflows.
+
+---
+
+### Context Preservation
+
+When errors occur, the UI preserves the user’s working context to avoid unnecessary re-entry or disruption. This includes:
+- current filters and pagination state  
+- selected rows or records  
+- in-progress form input values  
+- temporary UI state such as open modals or selections  
+
+Preserving context is especially important in operational workflows where actions are repetitive or data entry is time-consuming.
+
+---
+
+### UI Presentation Rules
+
+Error presentation follows clear and consistent rules based on scope and severity.
+
+**Inline feedback**
+- field-level validation errors are displayed directly below inputs  
+- row-level permission issues are indicated using inline badges or status indicators  
+
+**Page-level feedback**
+- persistent banners are used for network or API failures  
+- transient toasts are used for short-lived feedback or confirmations  
+- empty states clearly communicate “no data” scenarios and provide relevant actions  
+
+This separation avoids overwhelming users while keeping failures visible and actionable.
+
+---
+
+### Recovery Patterns
+
+The system supports multiple recovery strategies depending on error type:
+
+- **Retry**: Re-execute the request using the same parameters (network or retriable API errors)  
+- **Reset**: Clear filters or local state and refetch default data  
+- **Cancel**: Abort in-flight requests when context changes  
+- **Undo**: Roll back optimistic updates when supported (used sparingly)  
+
+Each recovery path is explicit and predictable.
+
+---
+
+### Defensive Rendering
+
+The UI is resilient to incomplete or inconsistent data:
+- missing fields fall back to safe defaults  
+- partial responses render available data without breaking the layout  
+- inconsistent API responses degrade gracefully rather than failing hard  
+
+This defensive approach prevents UI crashes and improves system robustness.
+
+---
+
+### Developer Visibility
+
+Error handling balances user experience with developer observability:
+
+- **Users see** clear, actionable messages without internal details  
+- **Developers receive** full error objects, codes, and diagnostic information for debugging  
+
+This separation ensures usability without sacrificing maintainability.
+
+---
+
+### Benefits
+
+This strategy provides:
+- predictable failure behavior across pages  
+- no data loss from transient errors  
+- clear recovery paths for common failure scenarios  
+- a debuggable and transparent request lifecycle  
+
+---
+
+
 
 
 
