@@ -620,7 +620,23 @@ This onboarding approach results in:
 - A clear and repeatable debugging path from day one
 - Documentation that evolves alongside the codebase
 
+## 11. Appendix: Reference Materials
+Complete reference section with diagrams, templates, and definitions for the admin dashboard architecture.
 
+```mermaid
+graph TD
+    A["App<br/>Routing + Auth"] --> B["Page Components"]
+    B --> C["RecordsPage<br/>List + Filter"]
+    B --> D["RecordDetailPage<br/>View + Edit"]
+    B --> E["SettingsPage<br/>Configuration"]
+    C --> F["DataTable<br/>Pagination + Selection"]
+    D --> G["FormSection<br/>Validation"]
+    E --> H["FilterPanel<br/>Multi-field"]
+    F --> I["Modal<br/>Confirmation"]
+    G --> J["StatusBadge<br/>Empty/Error"]
+    I --> K["Atomic UI<br/>Button, Input"]
+```
+## Data flow (Happy path scenario)
 
 
 
