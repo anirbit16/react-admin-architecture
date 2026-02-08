@@ -482,9 +482,143 @@ These patterns provide:
 - scalability through server-side pagination  
 - clear guidance during empty, loading, and error states  
 
+## 10. Onboarding Guide for New Developers
+
+This section provides a structured onboarding path for frontend developers joining the admin dashboard codebase. The objective is to enable new contributors to become productive quickly while minimizing the risk of unintended architectural or behavioral changes.
+
+Rather than a file-by-file walkthrough, this guide focuses on mental models, recurring patterns, and safe entry points into the system.
+
 ---
 
+### Quickstart (Day 1)
 
+New developers should begin with a focused exploration of the application:
+
+1. Set up and run the application locally.
+2. Authenticate using the provided demo credentials.
+3. Navigate to a records-based page and experiment with filtering and pagination.
+4. Open the corresponding page-level component and trace the flow from UI state to API request to rendered output.
+5. Observe request lifecycles and state transitions using browser developer tools and structured logs.
+
+A recommended first task is fixing a small, non-critical table filter issue. Completing this task typically indicates a solid understanding of the dashboard’s core interaction patterns.
+
+---
+
+### Codebase Overview
+
+The frontend codebase is organized around clear responsibility boundaries:
+
+```text
+src/
+├── pages/           # Page orchestration (state ownership and API coordination)
+├── components/      # Reusable UI elements (tables, forms, modals)
+├── hooks/           # Shared logic (data fetching, validation)
+├── services/        # API clients and response normalization
+└── utils/           # Shared helpers (formatting, validation)
+```
+ 
+
+Developers are encouraged to begin by reviewing the following files:
+
+- **`pages/RecordsPage.tsx`** — a representative example of a complete page  
+- **`hooks/useApiData.ts`** — shared API interaction and request state handling  
+- **`components/DataTable.tsx`** — the core table abstraction used across screens  
+
+These files illustrate the core patterns used throughout the dashboard.
+
+---
+
+## Core Architectural Patterns
+
+The dashboard follows a small set of repeatable patterns that appear consistently across pages:
+
+- **State ownership hierarchy:**  
+  Page → Component → Derived state
+
+- **API interaction lifecycle:**  
+  Build → Load → Normalize → Render
+
+- **Explicit error handling:**  
+  Status tracking, context preservation, and defined recovery paths
+
+- **Tables:**  
+  Server-side pagination with persistent row selection
+
+- **Forms:**  
+  Local input state with page-level submission and side effects
+
+Understanding these patterns is more important than memorizing individual files.
+
+---
+
+## Debugging Workflow
+
+When issues arise, follow this consistent debugging approach:
+
+1. Inspect the **page-level component**, which owns data flow and request coordination.
+2. Review **hook return values** to confirm request state and normalized data shape.
+3. Verify **request parameters** in the network tab match the current UI state.
+4. Inspect **structured console logs** for state transitions and errors.
+5. Check **error boundaries or overlays** for render-time failures.
+
+In most cases, inspecting page-level state resolves the majority of issues efficiently.
+
+---
+
+## Common Development Tasks
+
+Typical development tasks map directly to established patterns:
+
+- **Add a new page:**  
+  Create a page-level component and register the route.
+
+- **Add a table column:**  
+  Update table configuration and API query parameters.
+
+- **Add a filter:**  
+  Extend the filter panel and page-level state.
+
+- **Add a form field:**  
+  Manage local input state and pass values during submission.
+
+- **Add a bulk action:**  
+  Reuse selection state and invoke the relevant API service.
+
+Following these mappings reduces duplication and review overhead.
+
+---
+
+## Contribution Guidelines
+
+To maintain consistency and code quality:
+
+- Use feature branches with descriptive names
+- Run linting and tests before submitting changes
+- Update this document when introducing new patterns
+- Ensure pull requests align with established conventions
+- Record user-facing changes in the changelog
+
+---
+
+## Onboarding Milestones
+
+Typical onboarding progress follows this trajectory:
+
+- **Day 1:** Navigate pages and use filters independently  
+- **Day 3:** Add new table columns and filters  
+- **Week 1:** Build a complete new page using existing patterns  
+- **Week 2:** Identify and improve a performance bottleneck  
+
+---
+
+## Benefits
+
+This onboarding approach results in:
+
+- Consistent understanding of system patterns within hours rather than weeks
+- A shared mental model across all pages
+- A clear and repeatable debugging path from day one
+- Documentation that evolves alongside the codebase
 
 
 
