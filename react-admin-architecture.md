@@ -3,14 +3,14 @@ This React-based admin dashboard supports internal operational workflows. It is 
 and accessed by authenticated administrators and operational staff who prioritize </br>
 speed, accuracy, and consistency.</br>
 
-The frontend is designed to  predictable behavior, clear error handling, and maintainable components.
+The frontend is designed to deliver  predictable behavior, clear error handling, and maintainable components.
 
 ## Purpose of This Document
-Admin dashboards evolve continuously with changing business rules. This documentation preserves </br>
+Admin dashboards evolve continuously as business rules change. This documentation preserves </br>
 architectural decisions, simplifies onboarding, and reduces defects.
 
 ## Scope
-This document covers:
+This document focuses on the following areas:
 - Component boundaries and responsibilities
 - State and data flow
 - Form handling and validation
@@ -30,7 +30,7 @@ The frontend follows a layered architecture that separates concerns into three d
 
 - **Page orchestration layer**: Routes, layouts, and page-level state management  
 - **UI and domain components**: Reusable tables, forms, modals, and view components  
-- **Data layer**: API interactions, side effects, and data normalization  
+- **Data layer**:API interactions, side-effect management, and data normalization  
 
 This separation prevents business logic from leaking into UI components and keeps responsibilities explicit and easier to reason about.
 
@@ -59,12 +59,14 @@ remains the single source of truth for business logic.
 Page-level components orchestrate data and compose reusable UI. This keeps coordination logic separate from presentation.
 
 ### Page-Level Components
+
 Own view lifecycle and API coordination:
 
-- Trigger API requests on user actions/route changes
-- Manage page state (loading, error, filters, pagination)  
+- Trigger API requests on user actions or route changes
+- Manage page state (loading, error, filters, pagination)
 - Pass normalized data to children
 - Avoid detailed UI logic
+
 
 ### Reusable Components
 Handle specific UI/domain tasks via props:
@@ -74,7 +76,7 @@ Handle specific UI/domain tasks via props:
 - Form sections
 - Modals/confirmation dialogs
 
-**Stateless preferred**: Local state limited to UI concerns (focus, toggles).
+Stateless components are preferred. Local state is limited to UI concerns such as focus and toggle state.
 
 ### Business Logic Placement
 - Data transformation: Near API boundary
@@ -96,7 +98,7 @@ State is divided into three categories to improve clarity, predictability, and d
 
 Remote state represents data retrieved from backend APIs and is owned at the **page level**. This includes:
 - lists rendered in tables
-- record details for view or edit flows
+- record details for view and edit flows
 - dropdown or picklist options
 - permission or role-based configuration
 
@@ -142,9 +144,9 @@ User interactions follow a predictable, unidirectional flow:
 
 - User interaction updates UI state  
 - UI state triggers an API request  
-- The UI enters a loading state  
-- The API response updates remote state  
-- The UI re-renders based on the updated data or error state  
+- UI enters a loading state  
+- API response updates remote state  
+- UI re-renders based on the updated data or error state  
 
 This flow minimizes hidden state mutations and simplifies reasoning about asynchronous behavior.
 
